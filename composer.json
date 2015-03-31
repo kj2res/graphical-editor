@@ -1,0 +1,19 @@
+{
+    "name": "kingjames/graphical-editor",
+    "description": "Simple Interactive Graphical Editor Simulator",
+    "authors": [
+        {
+            "name": "King James Torres",
+            "email": "tcorp.kingjames@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "GraphicalEditor": "src/"
+        }
+    }
+}
