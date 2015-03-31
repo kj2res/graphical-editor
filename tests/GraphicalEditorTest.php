@@ -43,7 +43,32 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets the color
-        $this->assertEquals( $image[ $row - 1 ][ $col - 1 ], $color );
+        $this->assertEquals( $color, $image[ $row - 1 ][ $col - 1 ] );
+    }
+
+    /**
+     * [testClearCommand description]
+     * @return [type] [description]
+     */
+    public function testClearCommand() {
+
+        $this->editor->create( 10, 10 );
+        $this->editor->setColor( 4, 2, 'C' );
+
+        // get the update table
+        $image = $this->editor->showImage();
+
+        // check if the target pixel coordinate sets the color
+        $this->assertEquals( 'C', $image[ 4 - 1 ][ 2 - 1 ] );
+
+        // now clear the table
+        $this->editor->clear();
+
+        // get the updated table
+        $image = $this->editor->showImage();
+
+        // check if the target pixel coordinate sets to default color
+        $this->assertEquals( 'O', $image[ 4 - 1 ][ 2 - 1 ] );
     }
 
     /**
