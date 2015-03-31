@@ -49,10 +49,10 @@ class GraphicalEditorService {
 	}
 
 	/**
-	 * [setColor description]
-	 * @param [type] $row   [description]
-	 * @param [type] $col   [description]
-	 * @param [type] $color [description]
+	 * [setColor Sets the color of the specified Pixel Coordinate]
+	 * @param [int] $row   [ pixelX ]
+	 * @param [int] $col   [ pixelY ]
+	 * @param [string] $color [ The Color to be set ]
 	 */
 	public function setColor( $row, $col, $color ) 
 	{
@@ -63,7 +63,7 @@ class GraphicalEditorService {
 	}
 
 	/**
-	 * [_validatePixels description]
+	 * [_validatePixels Check if the range of pixels is valid]
 	 * @param  [type] $rows [description]
 	 * @param  [type] $cols [description]
 	 * @return [type]       [description]
@@ -77,6 +77,12 @@ class GraphicalEditorService {
 		return false;
 	}
 
+	/**
+	 * [_validatePixel Check if specified pixel coordinate exist]
+	 * @param  [type] $row [ pixelX ]
+	 * @param  [type] $col [ pixelY ]
+	 * @return [boolean]
+	 */
 	private function _validatePixel( $row, $col ) 
 	{
 		if( isset( $this->image[ $row - 1 ][ $col - 1 ] ) ) 
@@ -84,5 +90,14 @@ class GraphicalEditorService {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * [showImage Get the Image]
+	 * @return array The image
+	 */
+	public function showImage() 
+	{
+		return $this->image;
 	}
 }
