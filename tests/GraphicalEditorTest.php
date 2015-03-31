@@ -40,7 +40,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
         $this->editor->create( 10, 10 );
         $this->editor->setColor( $row, $col, $color );
 
-        $image = $this->editor->getImage();
+        $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets the color
         $this->assertEquals( $image[ $row - 1 ][ $col - 1 ], $color );
