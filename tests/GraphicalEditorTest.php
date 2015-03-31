@@ -87,6 +87,21 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     *  @dataProvider setHorizontalSegmentProvider
+     */
+    public function testSetHorizontalSegmentCommand( $col1, $col2, $row, $color ) {
+
+        $this->editor->create( 10, 10 );
+        $this->editor->setHorizontalSegment( $col1, $col2, $row, $color );
+
+        $image = $this->editor->showImage();
+
+        // check if the target pixel coordinate sets the color
+        $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // X1
+        $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // X2
+    }
+
+    /**
      * [createProvider description]
      * @return [type] [description]
      */
@@ -120,6 +135,17 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
 
         return array(
             array( 2, 3, 4, 'W' )
+        );
+    }
+
+    /**
+     * [setHorizontalSegmentProvider description]
+     * @return [type] [description]
+     */
+    public function setHorizontalSegmentProvider() {
+
+        return array(
+            array( 3, 4, 2, 'Z' )
         );
     }
 }
