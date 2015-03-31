@@ -49,6 +49,20 @@ class GraphicalEditorService {
 	}
 
 	/**
+	 * [setColor description]
+	 * @param [type] $row   [description]
+	 * @param [type] $col   [description]
+	 * @param [type] $color [description]
+	 */
+	public function setColor( $row, $col, $color ) 
+	{
+		if( $this->_validatePixel( $row, $col ) ) 
+		{
+			$this->image[ $row - 1 ][ $col - 1 ] = $color;
+		}
+	}
+
+	/**
 	 * [_validatePixels description]
 	 * @param  [type] $rows [description]
 	 * @param  [type] $cols [description]
@@ -57,6 +71,15 @@ class GraphicalEditorService {
 	private function _validatePixels( $rows, $cols ) 
 	{
 		if( $cols >= 1 && ($rows <= 250 && $rows >= 1) ) 
+		{
+			return true;
+		}
+		return false;
+	}
+
+	private function _validatePixel( $row, $col ) 
+	{
+		if( isset( $this->image[ $row - 1 ][ $col - 1 ] ) ) 
 		{
 			return true;
 		}
