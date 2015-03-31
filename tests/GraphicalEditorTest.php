@@ -72,6 +72,21 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     *  @dataProvider setVerticalSegmentProvider
+     */
+    public function testSetVerticalSegmentCommand( $row, $col1, $col2, $color ) {
+
+        $this->editor->create( 10, 10 );
+        $this->editor->setVerticalSegment( $row, $col1, $col2, $color );
+
+        $image = $this->editor->showImage();
+
+        // check if the target pixel coordinate sets the color
+        $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // Y1
+        $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // Y2
+    }
+
+    /**
      * [createProvider description]
      * @return [type] [description]
      */
@@ -94,6 +109,17 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
             array( 2, 3, 'C' ),
             array( 5, 6, 'C' ),
             array( 10, 4, 'C')
+        );
+    }
+
+    /**
+     * [setVerticalSegmentProvider description]
+     * @return [type] [description]
+     */
+    public function setVerticalSegmentProvider() {
+
+        return array(
+            array( 2, 3, 4, 'W' )
         );
     }
 }
