@@ -79,6 +79,22 @@ class GraphicalEditorService {
 	}
 
 	/**
+	 * [setHorizontalSegment Creates Horizontal Segment]
+	 * @param [type] $col1  [description]
+	 * @param [type] $col2  [description]
+	 * @param [type] $row   [description]
+	 * @param [type] $color [description]
+	 */
+	public function setHorizontalSegment( $col1, $col2, $row, $color ) 
+	{
+		if( $this->_validatePixel( $row, $col1 ) && $this->_validatePixel( $row, $col2 ) ) 
+		{
+			$this->image[ $row - 1 ][ $col1 - 1 ] = $color;
+			$this->image[ $row - 1 ][ $col2 - 1 ] = $color;
+		}
+	}
+
+	/**
 	 * [clear Reset the Image]
 	 * @return [type] [description]
 	 */
