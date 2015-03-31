@@ -63,6 +63,17 @@ class GraphicalEditorService {
 	}
 
 	/**
+	 * [clear Reset the Image]
+	 * @return [type] [description]
+	 */
+	public function clear() 
+	{
+		array_walk_recursive( $this->image, function( &$value, $key ) {
+			$value = $this->defaultColor;
+		});
+	}
+
+	/**
 	 * [_validatePixels Check if the range of pixels is valid]
 	 * @param  [type] $rows [description]
 	 * @param  [type] $cols [description]
