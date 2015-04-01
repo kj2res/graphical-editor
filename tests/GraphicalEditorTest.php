@@ -6,7 +6,7 @@ use GraphicalEditor\GraphicalEditorService;
 
 /**
  * Editor Commands Test
- * @author King James Torres <tcopr.kingjames@gmail.com>
+ * @author King James Torres <tcorp.kingjames@gmail.com>
  */
 class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
 
@@ -37,7 +37,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testSetColorCommand( $pixelY, $pixelX, $color )
     {
-        $this->editor->create( 10, 10 );
+        $this->editor->create( 5, 6 );
         $this->editor->setColor( $pixelY, $pixelX, $color );
 
         $image = $this->editor->showImage();
@@ -52,14 +52,14 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testClearCommand() 
     {
-        $this->editor->create( 10, 10 );
-        $this->editor->setColor( 4, 2, 'C' );
+        $this->editor->create( 5, 6 );
+        $this->editor->setColor( 2, 3, 'C' );
 
         // get the update table
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets the color
-        $this->assertEquals( 'C', $image[ 4 - 1 ][ 2 - 1 ] );
+        $this->assertEquals( 'C', $image[ 2 ][ 1 ] );
 
         // now clear the table
         $this->editor->clear();
@@ -68,7 +68,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets to default color
-        $this->assertEquals( 'O', $image[ 4 - 1 ][ 2 - 1 ] );
+        $this->assertEquals( 'O', $image[ 2 ][ 1 ] );
     }
 
     /**
@@ -76,7 +76,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testSetVerticalSegmentCommand( $pixelY, $pixelX1, $pixelX2, $color ) 
     {
-        $this->editor->create( 10, 10 );
+        $this->editor->create( 5, 6 );
         $this->editor->setVerticalSegment( $pixelY, $pixelX1, $pixelX2, $color );
 
         $image = $this->editor->showImage();
@@ -93,7 +93,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testSetHorizontalSegmentCommand( $pixelY1, $pixelY2, $pixelX, $color ) 
     {
-        $this->editor->create( 10, 10 );
+        $this->editor->create( 5, 6 );
         $this->editor->setHorizontalSegment( $pixelY1, $pixelY2, $pixelX, $color );
 
         $image = $this->editor->showImage();
@@ -110,7 +110,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testfillRegion( $row, $col, $color ) 
     {
-        $this->editor->create( 10, 10 );
+        $this->editor->create( 5, 6 );
         $this->editor->fillRegion( $row, $col, $color );
 
         $image = $this->editor->showImage();
