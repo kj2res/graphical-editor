@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Graphical Editor Command Demo
+ * Graphical Editor Command Simulator
  * @author King James Torres <tcorp.kingjames@gmail.com>
  */
 
@@ -9,137 +9,163 @@ require_once 'vendor/autoload.php';
 
 use GraphicalEditor\GraphicalEditorService;
 
-/**
- * [$exit Flag for Exiting the program]
- * @var integer
- */
-$exit = 0;
-	
-/**
- * [getArgs Get the Inputs]
- * @param  [type] $input [description]
- * @return [type]        [description]
- */
-function getArgs( $input ) 
-{
-	return explode( ' ', $input );
-}
 
-/**
- * [isValidParams checking parameters]
- * @param  [type]  $args   [description]
- * @param  [type]  $length [description]
- * @return boolean         [description]
- */
-function isValidParams( $args, $length ) 
-{
-	if( count( $args ) !== $length ) {
-		return false;
-	}
-	return true;
-}
+class Simulator {
 
-$editor = new GraphicalEditorService();
+	/**
+	 * [$exit Flag for Exiting the program]
+	 * @var boolean
+	 */
+	protected $exit = false;
 
-print "\n" . 'Graphical Editor Simulator' . "\n";
+	/**
+	 * [$editor description]
+	 * @var [type]
+	 */
+	protected $editor;
 
-while( !$exit ) 
-{
-
-	/* Request input */
-	print '> ';
-
-	/* get the command */
-	$input = trim( fgets( STDIN ) );
-
-	// when X exit the program
-	if ( strtoupper( $input ) === 'X' )
+	/**
+	 * [__construct description]
+	 */
+	public function __construct()
 	{
-		$exit++;
-		break;
+		$this->editor = new GraphicalEditorService();
 	}
 
-	$args = getArgs( $input );
-	$command = strtoupper( current($args) );
+	/**
+	 * [run Starts the program]
+	 * @return [type] [description]
+	 */
+	public function run()
+	{
+		print "\n" . 'Graphical Editor Simulator' . "\n\n";
 
-	if( $command === 'I' ) 
-	{	
-		if( isValidParams( $args, 3 ) ) 
-		{
-			$editor->create( $args[1], $args[2] );
-		}
-		else 
-		{
-			print "Invalid Command. It should be 'I M N' \n";
-		}
-	}
-	else if( $command === 'L' ) 
-	{
-		if( isValidParams( $args, 4 ) ) 
-		{
-			$editor->setColor( $args[1], $args[2], $args[3] );
-		}
-		else
-		{
-			print "Invalid Command. It should be 'L X Y C' \n";
-		}
-		
-	}
-	else if( $command === 'S' ) 
-	{
-		if( $rows = $editor->showImage() ) 
-		{
-			foreach ( $rows as $row ) 
+		do {
+
+			/* Request input */
+			print '> ';
+
+			/* get the command */
+			$input = trim( fgets( STDIN ) );
+
+			// when X exit the program
+			if ( strtoupper( $input ) === 'X' )
 			{
-				foreach ( $row as $col ) 
-				{
-					print $col;
-				}
-				print "\n";
+				$this->exit = true;
+				break;
 			}
-		}
-		else {
-			print 'No image created' . "\n";
-		}
+
+			$args = $this->_getInput( $input );
+			$command = strtoupper( current($args) );
+
+			switch ( $command ) {
+
+				case 'I':
+
+					if( $this->_isValidInput( $args, 3 ) ) 
+						$this->editor->create( $args[1], $args[2] );
+					else 
+						print "Invalid Command. It should be 'I M N' \n";
+
+					break;
+
+				case 'L':
+
+					if( $this->_isValidInput( $args, 4 ) ) 
+						$this->editor->setColor( $args[1], $args[2], $args[3] );
+					else
+						print "Invalid Command. It should be 'L X Y C' \n";
+
+					break;
+
+				case 'S':
+
+					if( $rows = $this->editor->showImage() ) 
+					{
+						foreach ( $rows as $row ) 
+						{
+							foreach ( $row as $col ) 
+							{
+								print $col;
+							}
+							print "\n";
+						}
+					}
+					else {
+						print 'No image created' . "\n";
+					}
+
+					break;
+
+				case 'C':
+
+					$this->editor->clear();
+					break;
+
+				case 'F':
+
+					if( $this->_isValidInput( $args, 4 ) )
+						$this->editor->fillRegion( $args[1], $args[2], $args[3] );
+					else
+						print "Invalid Command. It should be 'F X Y C' \n";
+
+					break;
+
+				case 'V':
+
+					if( $this->_isValidInput( $args, 5 ) )
+						$this->editor->setVerticalSegment( $args[1], $args[2], $args[3], $args[4] );
+					else
+						print "Invalid Command. It should be 'V X Y1 Y2 C' \n";
+
+					break;
+
+				case 'H':
+
+					if( $this->_isValidInput( $args, 5 ) )
+						$this->editor->setHorizontalSegment( $args[1], $args[2], $args[3], $args[4] );
+					else 
+						print "Invalid Command. It should be 'H X1 X2 Y C' \n";
+
+					break;
+
+				default:
+					break;
+			}
+
+		} while( !$this->exit );
+
+		print 'Exiting..'."\n";
+		exit;
 	}
-	else if( $command === 'C' ) 
+
+	/**
+	 * [getInput Get the input]
+	 * @param  [type] $input [description]
+	 * @return [type]        [description]
+	 */
+	private function _getInput( $input )
 	{
-		$editor->clear();
+		return explode( ' ', $input );
 	}
-	else if( $command === 'F' ) 
+
+	/**
+	 * [_isValidInput checking parameters]
+	 * @param  [type]  $args   [description]
+	 * @param  [type]  $length [description]
+	 * @return boolean         [description]
+	 */
+	private function _isValidInput( $input, $length )
 	{
-		if( isValidParams( $args, 4 ) )
-		{
-			$editor->fillRegion( $args[1], $args[2], $args[3] );
+		if( count( $input ) !== $length ) {
+			return false;
 		}
-		else
-		{
-			print "Invalid Command. It should be 'F X Y C' \n";
-		}
-	}
-	else if( $command === 'V' )
-	{
-		if( isValidParams( $args, 5 ) )
-		{
-			$editor->setVerticalSegment( $args[1], $args[2], $args[3], $args[4] );
-		}
-		else
-		{
-			print "Invalid Command. It should be 'V X Y1 Y2 C' \n";
-		}
-	}
-	else if( $command === 'H' )
-	{
-		if( isValidParams( $args, 5 ) )
-		{
-			$editor->setHorizontalSegment( $args[1], $args[2], $args[3], $args[4] );
-		}
-		else 
-		{
-			print "Invalid Command. It should be 'H X1 X2 Y C' \n";
-		}
+		return true;
 	}
 }
 
-print 'Bye'."\n";
-exit;
+/**
+ * Running the simulator
+ */
+$simulator = new Simulator();
+$simulator->run();
