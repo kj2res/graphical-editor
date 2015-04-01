@@ -115,24 +115,30 @@ class GraphicalEditorService {
 	 */
 	public function fillRegion( $pixelX, $pixelY, $color )
 	{
-		$region = $this->image[ $pixelX - 1 ][ $pixelY - 1 ];
-		$newImage = array();
+		if( $this->image && $this->_validatePixel( $pixelY, $pixelX ) ) 
+		{
+			$region = $this->image[ $pixelX - 1 ][ $pixelY - 1 ];
+			$newImage = array();
 
-		foreach ( $this->image as $rowKey => $row ) {
-			foreach ( $row as $colKey => $col ) {
-				if( $this->_hasTheSameColor( $rowKey, $colKey, $region ) 
-					&& $this->_hasCommonSide( $rowKey, $colKey, $region ) )
+			foreach ( $this->image as $rowKey => $row ) 
+			{
+				foreach ( $row as $colKey => $col ) 
 				{
-					$newImage[ $rowKey ][ $colKey ] = $color;
-				}
-				else {
-					$newImage[ $rowKey ][ $colKey ] = $this->image[ $rowKey ][ $colKey ];
+					if( $this->_hasTheSameColor( $rowKey, $colKey, $region ) 
+						&& $this->_hasCommonSide( $rowKey, $colKey, $region ) )
+					{
+						$newImage[ $rowKey ][ $colKey ] = $color;
+					}
+					else 
+					{
+						$newImage[ $rowKey ][ $colKey ] = $this->image[ $rowKey ][ $colKey ];
+					}
 				}
 			}
-		}
 
-		// Now update the image
-		$this->image = $newImage;
+			// Now update the image
+			$this->image = $newImage;
+		}
 	}
 
 	/**
