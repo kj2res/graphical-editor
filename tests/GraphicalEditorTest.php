@@ -84,23 +84,25 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
         for( $x = $pixelX1 - 1; $x <= $pixelX2 - 1; $x++ ) {
 
             // check if the target pixel coordinate sets the color
-            $this->assertEquals( $color, $image[ $x ][ $pixelY - 1 ] ); // row1
+            $this->assertEquals( $color, $image[ $x ][ $pixelY - 1 ] ); // rows
         }
     }
 
     /**
      *  @dataProvider setHorizontalSegmentProvider
      */
-    public function testSetHorizontalSegmentCommand( $col1, $col2, $row, $color ) 
+    public function testSetHorizontalSegmentCommand( $pixelY1, $pixelY2, $pixelX, $color ) 
     {
         $this->editor->create( 10, 10 );
-        $this->editor->setHorizontalSegment( $col1, $col2, $row, $color );
+        $this->editor->setHorizontalSegment( $pixelY1, $pixelY2, $pixelX, $color );
 
         $image = $this->editor->showImage();
 
-        // check if the target pixel coordinate sets the color
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // X1
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // X2
+        for( $y = $pixelY1 - 1; $y <= $pixelY2 - 1; $y++ ) {
+
+            // check if the target pixel coordinate sets the color
+            $this->assertEquals( $color, $image[ $pixelX - 1 ][ $y ] ); // cols
+        }
     }
 
     /**
