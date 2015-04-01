@@ -35,15 +35,15 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     /**
      *  @dataProvider setColorCommandProvider
      */
-    public function testSetColorCommand( $row, $col, $color )
+    public function testSetColorCommand( $pixelY, $pixelX, $color )
     {
         $this->editor->create( 10, 10 );
-        $this->editor->setColor( $row, $col, $color );
+        $this->editor->setColor( $pixelY, $pixelX, $color );
 
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets the color
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col - 1 ] );
+        $this->assertEquals( $color, $image[ $pixelX - 1 ][ $pixelY - 1 ] );
     }
 
     /**
@@ -138,9 +138,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function setColorCommandProvider() 
     {
         return array(
-            array( 2, 3, 'C' ),
-            array( 5, 6, 'C' ),
-            array( 10, 4, 'C')
+            array( 2, 3, 'A' )
         );
     }
 

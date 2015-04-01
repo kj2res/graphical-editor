@@ -54,11 +54,11 @@ class GraphicalEditorService {
 	 * @param [int] $col   [ pixelY ]
 	 * @param [string] $color [ The Color to be set ]
 	 */
-	public function setColor( $row, $col, $color ) 
+	public function setColor( $pixelY, $pixelX, $color ) 
 	{
-		if( $this->_validatePixel( $row, $col ) ) 
+		if( $this->_validatePixel( $pixelY, $pixelX ) ) 
 		{
-			$this->image[ $row - 1 ][ $col - 1 ] = $color;
+			$this->image[ $pixelX - 1 ][ $pixelY - 1 ] = $color;
 		}
 	}
 
@@ -206,9 +206,9 @@ class GraphicalEditorService {
 	 * @param  [type] $col [ pixelY ]
 	 * @return [boolean]
 	 */
-	private function _validatePixel( $row, $col ) 
+	private function _validatePixel( $pixelY, $pixelX ) 
 	{
-		if( isset( $this->image[ $row - 1 ][ $col - 1 ] ) ) 
+		if( isset( $this->image[ $pixelX - 1 ][ $pixelY - 1 ] ) ) 
 		{
 			return true;
 		}
