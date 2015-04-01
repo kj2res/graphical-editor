@@ -95,6 +95,35 @@ class GraphicalEditorService {
 	}
 
 	/**
+	 * [fillRegion description]
+	 * @param  [type] $pixelX [description]
+	 * @param  [type] $pixelY [description]
+	 * @param  [type] $color  [description]
+	 * @return [type]         [description]
+	 */
+	public function fillRegion( $pixelX, $pixelY, $color )
+	{
+		$region = $this->image[ $pixelX - 1 ][ $pixelY - 1 ];
+		$newImage = array();
+
+		foreach ( $this->image as $rowKey => $row ) {
+			foreach ( $row as $colKey => $col ) {
+				if( $this->_hasTheSameColor( $rowKey, $colKey, $region ) 
+					&& $this->_hasCommonSide( $rowKey, $colKey, $region ) )
+				{
+					$newImage[ $rowKey ][ $colKey ] = $color;
+				}
+				else {
+					$newImage[ $rowKey ][ $colKey ] = $this->image[ $rowKey ][ $colKey ];
+				}
+			}
+		}
+
+		// Now update the image
+		$this->image = $newImage;
+	}
+
+	/**
 	 * [clear Reset the Image]
 	 * @return [type] [description]
 	 */
@@ -103,6 +132,57 @@ class GraphicalEditorService {
 		array_walk_recursive( $this->image, function( &$value, $key ) {
 			$value = $this->defaultColor;
 		});
+	}
+
+	/**
+	 * [_hasCommonSide description]
+	 * @param  [type]  $pixelX [description]
+	 * @param  [type]  $pixelY [description]
+	 * @param  [type]  $region [description]
+	 * @return boolean         [description]
+	 */
+	private function _hasCommonSide( $pixelX, $pixelY, $region ) 
+	{
+		$hasCommon = false;
+		$directions = array(
+			'left'        => array( 'pixelX' => $pixelX, 'pixelY' => $pixelY - 1 ), 
+			'right'       => array( 'pixelX' => $pixelX, 'pixelY' => $pixelY + 1 ), 
+			'top'         => array( 'pixelX' => $pixelX - 1, 'pixelY' => $pixelY ), 
+			'bottom'      => array( 'pixelX' => $pixelX + 1, 'pixelY' => $pixelY ), 
+			'topLeft'     => array( 'pixelX' => $pixelX - 1, 'pixelY' => $pixelY - 1 ), 
+			'topRight'    => array( 'pixelX' => $pixelX - 1, 'pixelY' => $pixelY + 1 ), 
+			'bottomLeft'  => array( 'pixelX' => $pixelX + 1, 'pixelY' => $pixelY - 1 ), 
+			'bottomRight' => array( 'pixelX' => $pixelX + 1, 'pixelY' => $pixelY + 1 ), 
+		);
+
+		foreach ( $directions as $direction ) 
+		{
+			$target = isset($this->image[ $direction['pixelX'] ][ $direction['pixelY'] ]) ?
+					  $this->image[ $direction['pixelX'] ][ $direction['pixelY'] ] : null;
+
+			if( $target === $region ) {
+				$hasCommon = true;
+				break;
+			}
+		}
+
+		return $hasCommon;
+	}
+
+	/**
+	 * [_hasTheSameColor description]
+	 * @param  [type]  $pixelX [description]
+	 * @param  [type]  $pixelY [description]
+	 * @param  [type]  $region [description]
+	 * @return boolean         [description]
+	 */
+	private function _hasTheSameColor( $pixelX, $pixelY, $region )
+	{
+		if( $this->image[ $pixelX ][ $pixelY ] === $region )
+		{
+			return true;
+		}
+		return false;
 	}
 
 	/**

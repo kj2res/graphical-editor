@@ -50,8 +50,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      * [testClearCommand description]
      * @return [type] [description]
      */
-    public function testClearCommand() {
-
+    public function testClearCommand() 
+    {
         $this->editor->create( 10, 10 );
         $this->editor->setColor( 4, 2, 'C' );
 
@@ -74,8 +74,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     /**
      *  @dataProvider setVerticalSegmentProvider
      */
-    public function testSetVerticalSegmentCommand( $row, $col1, $col2, $color ) {
-
+    public function testSetVerticalSegmentCommand( $row, $col1, $col2, $color ) 
+    {
         $this->editor->create( 10, 10 );
         $this->editor->setVerticalSegment( $row, $col1, $col2, $color );
 
@@ -89,8 +89,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     /**
      *  @dataProvider setHorizontalSegmentProvider
      */
-    public function testSetHorizontalSegmentCommand( $col1, $col2, $row, $color ) {
-
+    public function testSetHorizontalSegmentCommand( $col1, $col2, $row, $color ) 
+    {
         $this->editor->create( 10, 10 );
         $this->editor->setHorizontalSegment( $col1, $col2, $row, $color );
 
@@ -99,6 +99,25 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
         // check if the target pixel coordinate sets the color
         $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // X1
         $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // X2
+    }
+
+    /**
+     *  @dataProvider fillRegionProvider
+     */
+    public function testfillRegion( $row, $col, $color ) 
+    {
+        $this->editor->create( 10, 10 );
+        $this->editor->fillRegion( $row, $col, $color );
+
+        $image = $this->editor->showImage();
+
+        foreach ( $image as $rowKey => $row ) 
+        {
+            foreach ( $row as $colKey => $col ) 
+            {
+                $this->assertEquals( $color, $col );
+            }
+        }
     }
 
     /**
@@ -118,8 +137,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      * [setColorCommandProvider description]
      * @return [type] [description]
      */
-    public function setColorCommandProvider() {
-
+    public function setColorCommandProvider() 
+    {
         return array(
             array( 2, 3, 'C' ),
             array( 5, 6, 'C' ),
@@ -131,8 +150,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      * [setVerticalSegmentProvider description]
      * @return [type] [description]
      */
-    public function setVerticalSegmentProvider() {
-
+    public function setVerticalSegmentProvider() 
+    {
         return array(
             array( 2, 3, 4, 'W' )
         );
@@ -142,10 +161,21 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      * [setHorizontalSegmentProvider description]
      * @return [type] [description]
      */
-    public function setHorizontalSegmentProvider() {
-
+    public function setHorizontalSegmentProvider() 
+    {
         return array(
             array( 3, 4, 2, 'Z' )
+        );
+    }
+
+    /**
+     * [fillRegionProvider description]
+     * @return [type] [description]
+     */
+    public function fillRegionProvider() 
+    {
+        return array(
+            array( 1, 1, 'C' )
         );
     }
 }
