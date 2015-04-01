@@ -24,9 +24,9 @@ class GraphicalEditorService {
 	 * [create Create the Image]
 	 * @return [type] [description]
 	 */
-	public function create( $rows, $cols )
+	public function create( $cols, $rows )
 	{
-		if( $isValid = $this->_validatePixels( $rows, $cols ) ) 
+		if( $isValid = $this->_validateTableSize( $rows, $cols ) ) 
 		{
 			$image = array();
 			$divider = array();
@@ -186,12 +186,12 @@ class GraphicalEditorService {
 	}
 
 	/**
-	 * [_validatePixels Check if the range of pixels is valid]
+	 * [_validateTableSize Check if the range of pixels is valid]
 	 * @param  [type] $rows [description]
 	 * @param  [type] $cols [description]
 	 * @return [type]       [description]
 	 */
-	private function _validatePixels( $rows, $cols ) 
+	private function _validateTableSize( $cols, $rows ) 
 	{
 		if( $cols >= 1 && ($rows <= 250 && $rows >= 1) ) 
 		{

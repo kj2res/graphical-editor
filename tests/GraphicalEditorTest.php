@@ -27,9 +27,9 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     /**
      *  @dataProvider createCommandProvider
      */
-    public function testCreateCommand( $rows, $cols )
+    public function testCreateCommand( $cols, $rows )
     {
-        $this->assertTrue( $this->editor->create( $rows, $cols ) );
+        $this->assertTrue( $this->editor->create( $cols, $rows ) );
     }
 
     /**
@@ -127,9 +127,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function createCommandProvider() 
     {
         return array(
-            array( 19, 10 ),
-            array( 10, 10 ),
-            array( 1, 4 )
+            array( 5, 6 ),
         );
     }
 
