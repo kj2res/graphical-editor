@@ -153,7 +153,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function setVerticalSegmentProvider() 
     {
         return array(
-            array( 2, 3, 4, 'W' )
+            array( 2, 3, 4, 'W' ), // short range
+            array( 2, 3, 5, 'W' ), // long range
         );
     }
 
@@ -164,7 +165,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function setHorizontalSegmentProvider() 
     {
         return array(
-            array( 3, 4, 2, 'Z' )
+            array( 3, 4, 2, 'Z' ), // short range
+            array( 3, 5, 2, 'Z' ), // long range
         );
     }
 
@@ -175,7 +177,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function fillRegionProvider() 
     {
         return array(
-            array( 1, 1, 'C' )
+            array( 1, 1, 'C' ),
+            array( 3, 3, 'J')
         );
     }
 }
