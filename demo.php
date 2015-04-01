@@ -136,7 +136,7 @@ class Simulator {
 		} while( !$this->exit );
 
 		print 'Exiting..'."\n";
-		exit;
+		$this->editor->terminate();
 	}
 
 	/**

@@ -241,4 +241,13 @@ class GraphicalEditorService {
 	{
 		return $this->image;
 	}
+
+	/**
+	 * [terminate Terminates session]
+	 * @return [type] [description]
+	 */
+	public function terminate() 
+	{
+		exit;
+	}
 }
