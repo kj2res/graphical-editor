@@ -74,16 +74,18 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     /**
      *  @dataProvider setVerticalSegmentProvider
      */
-    public function testSetVerticalSegmentCommand( $row, $col1, $col2, $color ) 
+    public function testSetVerticalSegmentCommand( $pixelY, $pixelX1, $pixelX2, $color ) 
     {
         $this->editor->create( 10, 10 );
-        $this->editor->setVerticalSegment( $row, $col1, $col2, $color );
+        $this->editor->setVerticalSegment( $pixelY, $pixelX1, $pixelX2, $color );
 
         $image = $this->editor->showImage();
 
-        // check if the target pixel coordinate sets the color
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // Y1
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // Y2
+        for( $x = $pixelX1 - 1; $x <= $pixelX2 - 1; $x++ ) {
+
+            // check if the target pixel coordinate sets the color
+            $this->assertEquals( $color, $image[ $x ][ $pixelY - 1 ] ); // row1
+        }
     }
 
     /**

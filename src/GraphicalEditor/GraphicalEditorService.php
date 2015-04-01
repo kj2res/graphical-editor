@@ -64,17 +64,23 @@ class GraphicalEditorService {
 
 	/**
 	 * [setVerticalSegment Creates Vertical Segment]
-	 * @param [type] $row   [description]
-	 * @param [type] $col1  [description]
-	 * @param [type] $col2  [description]
+	 * @param [type] $pixelX   [description]
+	 * @param [type] $pixelY1  [description]
+	 * @param [type] $pixelY2  [description]
 	 * @param [type] $color [description]
 	 */
-	public function setVerticalSegment( $row, $col1, $col2, $color ) 
+	public function setVerticalSegment( $pixelY, $pixelX1, $pixelX2, $color ) 
 	{
-		if( $this->_validatePixel( $row, $col1 ) && $this->_validatePixel( $row, $col2 ) ) 
+		if( $pixelX1 < $pixelX2 ) 
 		{
-			$this->image[ $row - 1 ][ $col1 - 1 ] = $color;
-			$this->image[ $row - 1 ][ $col2 - 1 ] = $color;
+			for( $x = $pixelX1 - 1; $x <= $pixelX2 - 1; $x++ ) 
+			{
+				if( $this->_validatePixel( $pixelY, $x + 1 ) ) 
+				{
+					$this->image[ $x ][ $pixelY - 1 ] = $color;
+					$this->image[ $x ][ $pixelY - 1 ] = $color;
+				}
+			}
 		}
 	}
 
