@@ -24,9 +24,9 @@ class GraphicalEditorService {
 	 * [create Create the Image]
 	 * @return [type] [description]
 	 */
-	public function create( $rows, $cols )
+	public function create( $cols, $rows )
 	{
-		if( $isValid = $this->_validatePixels( $rows, $cols ) ) 
+		if( $isValid = $this->_validateTableSize( $rows, $cols ) ) 
 		{
 			$image = array();
 			$divider = array();
@@ -54,43 +54,55 @@ class GraphicalEditorService {
 	 * @param [int] $col   [ pixelY ]
 	 * @param [string] $color [ The Color to be set ]
 	 */
-	public function setColor( $row, $col, $color ) 
+	public function setColor( $pixelY, $pixelX, $color ) 
 	{
-		if( $this->_validatePixel( $row, $col ) ) 
+		if( $this->_validatePixel( $pixelY, $pixelX ) ) 
 		{
-			$this->image[ $row - 1 ][ $col - 1 ] = $color;
+			$this->image[ $pixelX - 1 ][ $pixelY - 1 ] = $color;
 		}
 	}
 
 	/**
 	 * [setVerticalSegment Creates Vertical Segment]
-	 * @param [type] $row   [description]
-	 * @param [type] $col1  [description]
-	 * @param [type] $col2  [description]
+	 * @param [type] $pixelX   [description]
+	 * @param [type] $pixelY1  [description]
+	 * @param [type] $pixelY2  [description]
 	 * @param [type] $color [description]
 	 */
-	public function setVerticalSegment( $row, $col1, $col2, $color ) 
+	public function setVerticalSegment( $pixelY, $pixelX1, $pixelX2, $color ) 
 	{
-		if( $this->_validatePixel( $row, $col1 ) && $this->_validatePixel( $row, $col2 ) ) 
+		if( $pixelX1 < $pixelX2 ) 
 		{
-			$this->image[ $row - 1 ][ $col1 - 1 ] = $color;
-			$this->image[ $row - 1 ][ $col2 - 1 ] = $color;
+			for( $x = $pixelX1 - 1; $x <= $pixelX2 - 1; $x++ ) 
+			{
+				if( $this->_validatePixel( $pixelY, $x + 1 ) ) 
+				{
+					$this->image[ $x ][ $pixelY - 1 ] = $color;
+					$this->image[ $x ][ $pixelY - 1 ] = $color;
+				}
+			}
 		}
 	}
 
 	/**
 	 * [setHorizontalSegment Creates Horizontal Segment]
-	 * @param [type] $col1  [description]
-	 * @param [type] $col2  [description]
-	 * @param [type] $row   [description]
+	 * @param [type] $pixelY1  [description]
+	 * @param [type] $pixelY2  [description]
+	 * @param [type] $pixelX   [description]
 	 * @param [type] $color [description]
 	 */
-	public function setHorizontalSegment( $col1, $col2, $row, $color ) 
+	public function setHorizontalSegment( $pixelY1, $pixelY2, $pixelX, $color ) 
 	{
-		if( $this->_validatePixel( $row, $col1 ) && $this->_validatePixel( $row, $col2 ) ) 
+		if( $pixelY1 < $pixelY2 ) 
 		{
-			$this->image[ $row - 1 ][ $col1 - 1 ] = $color;
-			$this->image[ $row - 1 ][ $col2 - 1 ] = $color;
+			for( $y = $pixelY1 - 1; $y <= $pixelY2 - 1; $y++ ) 
+			{
+				if( $this->_validatePixel( $y + 1, $pixelX ) ) 
+				{
+					$this->image[ $pixelX - 1 ][ $y ] = $color;
+					$this->image[ $pixelX - 1 ][ $y ] = $color;
+				}
+			}
 		}
 	}
 
@@ -103,24 +115,30 @@ class GraphicalEditorService {
 	 */
 	public function fillRegion( $pixelX, $pixelY, $color )
 	{
-		$region = $this->image[ $pixelX - 1 ][ $pixelY - 1 ];
-		$newImage = array();
+		if( $this->image && $this->_validatePixel( $pixelY, $pixelX ) ) 
+		{
+			$region = $this->image[ $pixelX - 1 ][ $pixelY - 1 ];
+			$newImage = array();
 
-		foreach ( $this->image as $rowKey => $row ) {
-			foreach ( $row as $colKey => $col ) {
-				if( $this->_hasTheSameColor( $rowKey, $colKey, $region ) 
-					&& $this->_hasCommonSide( $rowKey, $colKey, $region ) )
+			foreach ( $this->image as $rowKey => $row ) 
+			{
+				foreach ( $row as $colKey => $col ) 
 				{
-					$newImage[ $rowKey ][ $colKey ] = $color;
-				}
-				else {
-					$newImage[ $rowKey ][ $colKey ] = $this->image[ $rowKey ][ $colKey ];
+					if( $this->_hasTheSameColor( $rowKey, $colKey, $region ) 
+						&& $this->_hasCommonSide( $rowKey, $colKey, $region ) )
+					{
+						$newImage[ $rowKey ][ $colKey ] = $color;
+					}
+					else 
+					{
+						$newImage[ $rowKey ][ $colKey ] = $this->image[ $rowKey ][ $colKey ];
+					}
 				}
 			}
-		}
 
-		// Now update the image
-		$this->image = $newImage;
+			// Now update the image
+			$this->image = $newImage;
+		}
 	}
 
 	/**
@@ -186,12 +204,12 @@ class GraphicalEditorService {
 	}
 
 	/**
-	 * [_validatePixels Check if the range of pixels is valid]
+	 * [_validateTableSize Check if the range of pixels is valid]
 	 * @param  [type] $rows [description]
 	 * @param  [type] $cols [description]
 	 * @return [type]       [description]
 	 */
-	private function _validatePixels( $rows, $cols ) 
+	private function _validateTableSize( $cols, $rows ) 
 	{
 		if( $cols >= 1 && ($rows <= 250 && $rows >= 1) ) 
 		{
@@ -206,9 +224,9 @@ class GraphicalEditorService {
 	 * @param  [type] $col [ pixelY ]
 	 * @return [boolean]
 	 */
-	private function _validatePixel( $row, $col ) 
+	private function _validatePixel( $pixelY, $pixelX ) 
 	{
-		if( isset( $this->image[ $row - 1 ][ $col - 1 ] ) ) 
+		if( isset( $this->image[ $pixelX - 1 ][ $pixelY - 1 ] ) ) 
 		{
 			return true;
 		}
@@ -222,5 +240,14 @@ class GraphicalEditorService {
 	public function showImage() 
 	{
 		return $this->image;
+	}
+
+	/**
+	 * [terminate Terminates session]
+	 * @return [type] [description]
+	 */
+	public function terminate() 
+	{
+		exit;
 	}
 }

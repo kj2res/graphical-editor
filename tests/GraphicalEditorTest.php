@@ -6,7 +6,7 @@ use GraphicalEditor\GraphicalEditorService;
 
 /**
  * Editor Commands Test
- * @author King James Torres <tcopr.kingjames@gmail.com>
+ * @author King James Torres <tcorp.kingjames@gmail.com>
  */
 class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
 
@@ -27,23 +27,23 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     /**
      *  @dataProvider createCommandProvider
      */
-    public function testCreateCommand( $rows, $cols )
+    public function testCreateCommand( $cols, $rows )
     {
-        $this->assertTrue( $this->editor->create( $rows, $cols ) );
+        $this->assertTrue( $this->editor->create( $cols, $rows ) );
     }
 
     /**
      *  @dataProvider setColorCommandProvider
      */
-    public function testSetColorCommand( $row, $col, $color )
+    public function testSetColorCommand( $pixelY, $pixelX, $color )
     {
-        $this->editor->create( 10, 10 );
-        $this->editor->setColor( $row, $col, $color );
+        $this->editor->create( 5, 6 );
+        $this->editor->setColor( $pixelY, $pixelX, $color );
 
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets the color
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col - 1 ] );
+        $this->assertEquals( $color, $image[ $pixelX - 1 ][ $pixelY - 1 ] );
     }
 
     /**
@@ -52,14 +52,14 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testClearCommand() 
     {
-        $this->editor->create( 10, 10 );
-        $this->editor->setColor( 4, 2, 'C' );
+        $this->editor->create( 5, 6 );
+        $this->editor->setColor( 2, 3, 'C' );
 
         // get the update table
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets the color
-        $this->assertEquals( 'C', $image[ 4 - 1 ][ 2 - 1 ] );
+        $this->assertEquals( 'C', $image[ 2 ][ 1 ] );
 
         // now clear the table
         $this->editor->clear();
@@ -68,37 +68,41 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
         $image = $this->editor->showImage();
 
         // check if the target pixel coordinate sets to default color
-        $this->assertEquals( 'O', $image[ 4 - 1 ][ 2 - 1 ] );
+        $this->assertEquals( 'O', $image[ 2 ][ 1 ] );
     }
 
     /**
      *  @dataProvider setVerticalSegmentProvider
      */
-    public function testSetVerticalSegmentCommand( $row, $col1, $col2, $color ) 
+    public function testSetVerticalSegmentCommand( $pixelY, $pixelX1, $pixelX2, $color ) 
     {
-        $this->editor->create( 10, 10 );
-        $this->editor->setVerticalSegment( $row, $col1, $col2, $color );
+        $this->editor->create( 5, 6 );
+        $this->editor->setVerticalSegment( $pixelY, $pixelX1, $pixelX2, $color );
 
         $image = $this->editor->showImage();
 
-        // check if the target pixel coordinate sets the color
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // Y1
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // Y2
+        for( $x = $pixelX1 - 1; $x <= $pixelX2 - 1; $x++ ) {
+
+            // check if the target pixel coordinate sets the color
+            $this->assertEquals( $color, $image[ $x ][ $pixelY - 1 ] ); // rows
+        }
     }
 
     /**
      *  @dataProvider setHorizontalSegmentProvider
      */
-    public function testSetHorizontalSegmentCommand( $col1, $col2, $row, $color ) 
+    public function testSetHorizontalSegmentCommand( $pixelY1, $pixelY2, $pixelX, $color ) 
     {
-        $this->editor->create( 10, 10 );
-        $this->editor->setHorizontalSegment( $col1, $col2, $row, $color );
+        $this->editor->create( 5, 6 );
+        $this->editor->setHorizontalSegment( $pixelY1, $pixelY2, $pixelX, $color );
 
         $image = $this->editor->showImage();
 
-        // check if the target pixel coordinate sets the color
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col1 - 1 ] ); // X1
-        $this->assertEquals( $color, $image[ $row - 1 ][ $col2 - 1 ] ); // X2
+        for( $y = $pixelY1 - 1; $y <= $pixelY2 - 1; $y++ ) {
+
+            // check if the target pixel coordinate sets the color
+            $this->assertEquals( $color, $image[ $pixelX - 1 ][ $y ] ); // cols
+        }
     }
 
     /**
@@ -106,7 +110,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
      */
     public function testfillRegion( $row, $col, $color ) 
     {
-        $this->editor->create( 10, 10 );
+        $this->editor->create( 5, 6 );
         $this->editor->fillRegion( $row, $col, $color );
 
         $image = $this->editor->showImage();
@@ -127,9 +131,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function createCommandProvider() 
     {
         return array(
-            array( 19, 10 ),
-            array( 10, 10 ),
-            array( 1, 4 )
+            array( 5, 6 ),
         );
     }
 
@@ -140,9 +142,7 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function setColorCommandProvider() 
     {
         return array(
-            array( 2, 3, 'C' ),
-            array( 5, 6, 'C' ),
-            array( 10, 4, 'C')
+            array( 2, 3, 'A' )
         );
     }
 
@@ -153,7 +153,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function setVerticalSegmentProvider() 
     {
         return array(
-            array( 2, 3, 4, 'W' )
+            array( 2, 3, 4, 'W' ), // short range
+            array( 2, 3, 5, 'W' ), // long range
         );
     }
 
@@ -164,7 +165,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function setHorizontalSegmentProvider() 
     {
         return array(
-            array( 3, 4, 2, 'Z' )
+            array( 3, 4, 2, 'Z' ), // short range
+            array( 3, 5, 2, 'Z' ), // long range
         );
     }
 
@@ -175,7 +177,8 @@ class GraphicalEditorTest extends PHPUnit_Framework_TestCase {
     public function fillRegionProvider() 
     {
         return array(
-            array( 1, 1, 'C' )
+            array( 1, 1, 'C' ),
+            array( 3, 3, 'J')
         );
     }
 }
