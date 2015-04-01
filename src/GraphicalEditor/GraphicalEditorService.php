@@ -58,7 +58,7 @@ class GraphicalEditorService {
 	{
 		if( $this->_validatePixel( $pixelY, $pixelX ) ) 
 		{
-			$this->image[ $pixelX - 1 ][ $pixelY - 1 ] = $color;
+			$this->image[ $pixelX - 1 ][ $pixelY - 1 ] = strtoupper( $color );
 		}
 	}
 
@@ -77,8 +77,8 @@ class GraphicalEditorService {
 			{
 				if( $this->_validatePixel( $pixelY, $x + 1 ) ) 
 				{
-					$this->image[ $x ][ $pixelY - 1 ] = $color;
-					$this->image[ $x ][ $pixelY - 1 ] = $color;
+					$this->image[ $x ][ $pixelY - 1 ] = strtoupper( $color );
+					$this->image[ $x ][ $pixelY - 1 ] = strtoupper( $color );
 				}
 			}
 		}
@@ -99,8 +99,8 @@ class GraphicalEditorService {
 			{
 				if( $this->_validatePixel( $y + 1, $pixelX ) ) 
 				{
-					$this->image[ $pixelX - 1 ][ $y ] = $color;
-					$this->image[ $pixelX - 1 ][ $y ] = $color;
+					$this->image[ $pixelX - 1 ][ $y ] = strtoupper( $color );
+					$this->image[ $pixelX - 1 ][ $y ] = strtoupper( $color );
 				}
 			}
 		}
@@ -127,7 +127,7 @@ class GraphicalEditorService {
 					if( $this->_hasTheSameColor( $rowKey, $colKey, $region ) 
 						&& $this->_hasCommonSide( $rowKey, $colKey, $region ) )
 					{
-						$newImage[ $rowKey ][ $colKey ] = $color;
+						$newImage[ $rowKey ][ $colKey ] = strtoupper( $color );
 					}
 					else 
 					{
